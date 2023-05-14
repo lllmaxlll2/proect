@@ -1,0 +1,760 @@
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@600&display=swap" rel="stylesheet">
+  <title>MoonClicker</title>
+  <link rel="icon" type="image/x-icon" href="moon.png">
+<style>
+html{
+  pointer-events:none;
+}
+body *{
+  pointer-events:initial;
+}
+body {
+background-color: #000;
+font-size: 24px;
+pointer-events:none;
+}
+.modal *{color: #a3c;}
+.retrobg-shutdown *{color: #fff}
+* {
+  font-family: 'Inconsolata', monospace;
+  color: #f5efef;
+  text-shadow: 3px 3px 1px #000102;
+}
+#timer {
+font-size: 666.667%;
+font-weight: bold;
+color: #38d109;
+text-align: center;
+transition: all 0.4s;
+}
+.invent {
+font-size: 100%;
+line-height: 30px;
+font-weight: bold;
+}
+.parent, .shop, .inventory {
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+position: absolute;
+font-weight: bold;
+padding: 20px;
+}
+.parent {
+top: 10%;
+left: 4%;
+background: none;
+font-size: 100%;
+line-height: 30px;
+height: 35%;
+width: 25%;
+}
+.parent button , .restart {
+background-image: url("moon.png");
+background-repeat: no-repeat;
+background-size: 100%;
+color: white;
+border: none;
+padding: 100px;
+font-size: 31px;
+height: 130px;
+width: 130px;
+box-shadow: 0 2px 4px darkslategray;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+.parent button:active {
+box-shadow: 0 0 2px darkslategray;
+transform: translateY(2px);
+}
+.parent button:not(:first-child) {
+margin-top: 10px;
+}
+.round {
+border-radius: 70%;
+animation: spin 20s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.disappear{
+  opacity: 0;
+  animation-name: disappear;
+  animation-duration: 5s;
+}
+@keyframes disappear {
+  0% {opacity:1}
+  90%{opacity: 0.9}
+  100% {opacity:0}
+}
+.disappear y {color: #d44;}
+.glow-on-hover {
+    width: 220px;
+    height: 50px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 70%;
+    background-color: #000;
+}
+
+.glow-on-hover:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left:-2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(10px);
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 70%;
+}
+
+
+.glow-on-hover:hover:before {
+    opacity: 1;
+}
+
+.glow-on-hover:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border-radius: 70%;
+    background-image: url("moon.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+.shop {
+top: 10%;
+right: 4%;
+background: none;
+font-size: 66.667%;
+line-height: 10px;
+padding: 20px;
+height: 80%;
+width: 25%;
+}
+.shop button, .collect {
+box-sizing: border-box;
+appearance: none;
+background-color: transparent;
+border: 2px solid #e74c3c;
+border-radius: 0.6em;
+color: #c2e73c;
+cursor: pointer;
+font-size: 1rem;
+font-weight: 700;
+line-height: 1;
+margin: 20px;
+padding: 1.2em 2.8em;
+text-decoration:none;
+text-align:center;
+text-transform: uppercase;
+transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+}
+.shop button:hover,
+.shop button:focus,.collect:hover,.collect:focus {
+color: #c2e73c;
+outline: none;
+}
+.shop button:hover,.collect:hover {
+box-shadow: inset #e74c3c 0px -70px, inset #e74c3c -70px -70px, inset #e74c3c -70px 0px, inset #e74c3c -70px 70px, inset #e74c3c 0px 70px, inset #e74c3c 70px 70px, inset #e74c3c 70px 0px, inset #e74c3c 70px -70px;
+}
+.restart {
+background-image: none;
+position: absolute;
+left: 50%;
+transform: translateX(-50%);
+padding: 10px;
+align-items: center;
+appearance: none;
+background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+border-radius: 6px;
+box-shadow: rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, rgba(58, 65, 111, .5) 0 -3px 0 inset;
+box-sizing: border-box;
+color: #fff;
+cursor: pointer;
+justify-content: center;
+list-style: none;
+overflow: hidden;
+text-align: left;
+text-decoration: none;
+transition: box-shadow .15s,transform .15s;
+user-select: none;
+-webkit-user-select: none;
+touch-action: manipulation;
+white-space: nowrap;
+will-change: box-shadow,transform;
+}
+.inventory {
+bottom: 5%;
+left: 4%;
+background: none;
+font-size: 66.667%;
+line-height: 28px;
+padding: 4px 20px;
+}
+.modal { /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: none;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  margin: auto;
+  padding: 0;
+  width: 70%;
+  height: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  font-size: 150%;
+  line-height: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+@keyframes animatetop2 {
+  from {top:-200px; opacity:0}
+  to {top:100; opacity:1}
+}
+
+.modal-header {padding: 2px 16px;}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {padding: 2px 16px;}
+html, body {
+	 margin: 0;
+	 height: 100%;
+   background-image: url("jupiter.png");
+   background-repeat: no-repeat;
+   background-size: 10%;
+   background-position-x: -20%;
+   background-position-y: 110%;
+   animation: flying 360s;
+   animation-iteration-count:infinite;
+   -moz-animation-iteration-count:infinite;
+   -webkit-animation-iteration-count:infinite;
+   z-index: 1;
+}
+@keyframes flying {
+  0%{background-position-x: -20%;
+   background-position-y: 110%;}
+  45%{background-position-x: 160%;
+   background-position-y: -25%;}
+  47%{background-position-x:-2000%}
+  49%{background-position-y: -20%;}
+  50%{background-position-x: 110%;}
+  95%{background-position-x: -25%;
+   background-position-y: 160%;}
+  99%{background-position-x:-2000%}
+  99.5%{background-position-x: -20%;}
+  100% {background-position-y: 110%;}
+}
+ #retrobg {
+  animation-name: animatetop2;
+  animation-duration: 0.4s;
+	 position: fixed;
+	 overflow: hidden;
+   width: 70%;
+   height: 50%;
+	 color: #a3c;
+	 background-color: #000;
+   z-index: -1;
+   top: 100px;
+}
+/* ............................................................... */
+ #retrobg-sky {
+	 position: absolute;
+	 display: flex;
+	 align-items: flex-end;
+	 justify-content: center;
+	 top: 0;
+	 width: 100%;
+	 height: 55%;
+	 background: linear-gradient(#214 75%, #249);
+}
+/* ............................................................... */
+ #retrobg-sunWrap {
+	 position: relative;
+	 width: 40%;
+	 margin-bottom: -15%;
+}
+ #retrobg-sun {
+	 --glow-color: #d44;
+	 padding-top: 100%;
+	 border-radius: 50%;
+	 background-image: linear-gradient(#fcdf11, #ff623f, #fe2085 50%);
+	 box-shadow: 0 0 160px 80px var(--glow-color);
+	 animation: 2s ease infinite alternate retrobg-sun-glow-anim;
+}
+ .retrobg-shutdown #retrobg-sun {
+	 background-image: linear-gradient(#000, #000 40%);
+	 --glow-color: #000;
+}
+ @keyframes retrobg-sun-glow-anim {
+	 from {
+		 box-shadow: 0 0 160px 80px var(--glow-color);
+	}
+	 to {
+		 box-shadow: 0 0 200px 95px var(--glow-color);
+	}
+}
+/* ............................................................... */
+ #retrobg-stars {
+	 position: absolute;
+	 width: 100%;
+	 height: 100%;
+}
+ .retrobg-star {
+	 position: absolute;
+	 border-radius: 50%;
+	 width: 2px;
+	 height: 2px;
+	 background-color: #fff;
+}
+/* ............................................................... */
+ #retrobg-mountains {
+	 position: absolute;
+	 width: 100%;
+	 height: 30%;
+}
+ .retrobg-mountain {
+	 position: absolute;
+	 width: 30%;
+	 height: 100%;
+	 background-image: linear-gradient(#000 70%, #111 85%, #fff 1);
+}
+ #retrobg-mountains-left {
+	 left: 0;
+	 clip-path: polygon(0% 100%, 0% 55%, 5% 60%, 10% 55%, 20% 50%, 25% 42%, 30% 38%, 33% 35%, 40% 45%, 50% 50%, 60% 70%, 70% 85%, 75% 82%, 80% 91%, 85% 90%, 90% 95%, 95% 98%, 100% 100%);
+}
+ #retrobg-mountains-right {
+	 right: 0;
+	 clip-path: polygon(0% 100%, 5% 95%, 10% 85%, 15% 87%, 20% 80%, 25% 78%, 30% 65%, 40% 70%, 50% 57%, 60% 53%, 67% 68%, 70% 70%, 75% 66%, 80% 55%, 90% 50%, 95% 60%, 100% 57%, 100% 100%);
+}
+/* ............................................................... */
+ #retrobg-cityWrap {
+	 position: absolute;
+	 width: 50%;
+	 margin-left: -1%;
+}
+ #retrobg-city {
+	 padding-top: 20%;
+}
+ .retrobg-building {
+	 position: absolute;
+	 width: 5%;
+	 height: 100%;
+	 bottom: 0;
+	 border-radius: 4px 4px 0 0;
+	 background-image: linear-gradient(0deg, rgba(17, 17, 34, 0), #112 30px, #000);
+}
+ .retrobg-building:nth-child( odd) {
+	 background-image: linear-gradient(0deg, rgba(24, 24, 42, 0), #223 30px, #000);
+}
+ .retrobg-antenna::after {
+	 content: "";
+	 position: absolute;
+	 left: 50%;
+	 margin-left: calc(-1px - 5%);
+	 bottom: 100%;
+	 width: 10%;
+	 min-width: 2px;
+	 height: 33%;
+	 background-color: #000;
+}
+/* ............................................................... */
+ #retrobg-ground {
+	 position: absolute;
+	 overflow: hidden;
+	 width: 100%;
+	 height: 45%;
+	 bottom: 0;
+	 border-top: 2px solid #bf578c;
+	 background-color: #000;
+}
+ .retrobg-shutdown #retrobg-ground {
+	 border-color: #000;
+}
+ #retrobg-groundShadow {
+	 position: absolute;
+	 top: 0;
+	 width: 100%;
+	 height: 100%;
+	 background-image: linear-gradient(#000 0%, transparent);
+}
+/* ............................................................... */
+ #retrobg-linesWrap {
+	 height: 100%;
+	 perspective: 1000px;
+	 perspective-origin: center top;
+}
+ #retrobg-lines {
+	 position: absolute;
+	 width: 100%;
+	 height: 100%;
+	 transform-origin: top center;
+	 animation: 0.35s linear infinite retrobg-lines-anim;
+}
+ .retrobg-shutdown #retrobg-lines {
+	 animation-duration: 5s;
+}
+ @keyframes retrobg-lines-anim {
+	 from {
+		 transform: rotateX(84deg) translateY(0);
+	}
+	 to {
+		 transform: rotateX(84deg) translateY(100px);
+	}
+}
+ #retrobg-hlines, #retrobg-vlines {
+	 position: absolute;
+	 left: calc(( 900% - 100% ) / -2);
+	 width: 900%;
+	 height: 500%;
+}
+ #retrobg-vlines {
+	 display: flex;
+	 justify-content: center;
+}
+ .retrobg-hline, .retrobg-vline {
+	 width: 100%;
+	 height: 100%;
+	 background-color: currentColor;
+}
+ .retrobg-hline {
+	 height: 3px;
+}
+ .retrobg-vline {
+	 width: 3px;
+}
+ .retrobg-hline + .retrobg-hline {
+	 margin-top: 98px;
+}
+ .retrobg-vline + .retrobg-vline {
+	 margin-left: 48px;
+}
+
+.main {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+    height: 1px;
+    width: 1px;
+    background-color: none;
+    border-radius: 50%;
+    box-shadow: -42vw -4vh 0px 0px #fff,25vw -41vh 0px 0px #fff,-20vw 49vh 0px 1px #fff,5vw 40vh 1px 1px #fff,29vw 19vh 1px 0px #fff,-44vw -13vh 0px 0px #fff,46vw 41vh 0px 1px #fff,-3vw -45vh 0px 1px #fff,47vw 35vh 1px 0px #fff,12vw -8vh 1px 0px #fff,-34vw 48vh 1px 1px #fff,32vw 26vh 1px 1px #fff,32vw -41vh 1px 1px #fff,0vw 37vh 1px 1px #fff,34vw -26vh 1px 0px #fff,-14vw -49vh 1px 0px #fff,-12vw 45vh 0px 1px #fff,-44vw -33vh 0px 1px #fff,-13vw 41vh 0px 0px #fff,-36vw -11vh 0px 1px #fff,-23vw -24vh 1px 0px #fff,-38vw -27vh 0px 1px #fff,16vw -19vh 0px 0px #fff,28vw 33vh 1px 0px #fff,-49vw -4vh 0px 0px #fff,16vw 32vh 0px 1px #fff,36vw -18vh 1px 0px #fff,-25vw -30vh 1px 0px #fff,-23vw 24vh 0px 1px #fff,-2vw -35vh 1px 1px #fff,-25vw 9vh 0px 0px #fff,-15vw -34vh 0px 0px #fff,-8vw -19vh 1px 0px #fff,-20vw -20vh 1px 1px #fff,42vw 50vh 0px 1px #fff,-32vw 10vh 1px 0px #fff,-23vw -17vh 0px 0px #fff,44vw 15vh 1px 0px #fff,-40vw 33vh 1px 1px #fff,-43vw 8vh 0px 0px #fff,-48vw -15vh 1px 1px #fff,-24vw 17vh 0px 0px #fff,-31vw 50vh 1px 0px #fff,36vw -38vh 0px 1px #fff,-7vw 48vh 0px 0px #fff,15vw -32vh 0px 0px #fff,29vw -41vh 0px 0px #fff,2vw 37vh 1px 0px #fff,7vw -40vh 1px 1px #fff,15vw 18vh 0px 0px #fff,25vw -13vh 1px 1px #fff,-46vw -12vh 1px 1px #fff,-18vw 22vh 0px 0px #fff,23vw -9vh 1px 0px #fff,50vw 12vh 0px 1px #fff,45vw 2vh 0px 0px #fff,14vw -48vh 1px 0px #fff,23vw 43vh 0px 1px #fff,-40vw 16vh 1px 1px #fff,20vw -31vh 0px 1px #fff,-17vw 44vh 1px 1px #fff,18vw -45vh 0px 0px #fff,33vw -6vh 0px 0px #fff,0vw 7vh 0px 1px #fff,-10vw -18vh 0px 1px #fff,-19vw 5vh 1px 0px #fff,1vw 42vh 0px 0px #fff,22vw 48vh 0px 1px #fff,39vw -8vh 1px 1px #fff,-6vw -42vh 1px 0px #fff,-47vw 34vh 0px 0px #fff,-46vw 19vh 0px 1px #fff,-12vw -32vh 0px 0px #fff,-45vw -38vh 0px 1px #fff,-28vw 18vh 1px 0px #fff,-38vw -46vh 1px 1px #fff,49vw -6vh 1px 1px #fff,-28vw 18vh 1px 1px #fff,10vw -24vh 0px 1px #fff,-5vw -11vh 1px 1px #fff,33vw -8vh 1px 0px #fff,-16vw 17vh 0px 0px #fff,18vw 27vh 0px 1px #fff,-8vw -10vh 1px 1px #fff;
+    box-shadow: 24vw 9vh 1px 0px #fff,12vw -24vh 0px 1px #fff,-45vw -22vh 0px 0px #fff,-37vw -40vh 0px 1px #fff,29vw 19vh 0px 1px #fff,4vw -8vh 0px 1px #fff,-5vw 21vh 1px 1px #fff,-27vw 26vh 1px 1px #fff,-47vw -3vh 1px 1px #fff,-28vw -30vh 0px 1px #fff,-43vw -27vh 0px 1px #fff,4vw 22vh 1px 1px #fff,36vw 23vh 0px 0px #fff,-21vw 24vh 1px 1px #fff,-16vw 2vh 1px 0px #fff,-16vw -6vh 0px 0px #fff,5vw 26vh 0px 0px #fff,-34vw 41vh 0px 0px #fff,1vw 42vh 1px 1px #fff,11vw -13vh 1px 1px #fff,48vw -8vh 1px 0px #fff,22vw -15vh 0px 0px #fff,45vw 49vh 0px 0px #fff,43vw -27vh 1px 1px #fff,20vw -2vh 0px 0px #fff,8vw 22vh 0px 1px #fff,39vw 48vh 1px 1px #fff,-21vw -11vh 0px 1px #fff,-40vw 45vh 0px 1px #fff,11vw -30vh 1px 0px #fff,26vw 30vh 1px 0px #fff,45vw -29vh 0px 1px #fff,-2vw 18vh 0px 0px #fff,-29vw -45vh 1px 0px #fff,-7vw -27vh 1px 1px #fff,42vw 24vh 0px 0px #fff,45vw -48vh 1px 0px #fff,-36vw -18vh 0px 0px #fff,-44vw 13vh 0px 1px #fff,36vw 16vh 0px 1px #fff,40vw 24vh 0px 0px #fff,18vw 11vh 0px 0px #fff,-15vw -23vh 1px 0px #fff,-24vw 48vh 0px 1px #fff,27vw -45vh 1px 0px #fff,-2vw -24vh 0px 1px #fff,-15vw -28vh 0px 0px #fff,-43vw 13vh 1px 0px #fff,7vw 27vh 1px 0px #fff,47vw 5vh 0px 0px #fff,-45vw 15vh 1px 1px #fff,-5vw -28vh 0px 1px #fff,38vw 25vh 1px 1px #fff,-39vw -1vh 1px 0px #fff,5vw 0vh 1px 0px #fff,49vw 13vh 0px 0px #fff,48vw 10vh 0px 1px #fff,19vw -28vh 0px 0px #fff,4vw 7vh 0px 0px #fff,21vw 21vh 1px 1px #fff,-15vw -15vh 0px 1px #fff,-6vw -42vh 1px 0px #fff,-15vw 48vh 1px 1px #fff,-23vw 25vh 1px 1px #fff,-48vw 25vh 0px 1px #fff,-31vw -19vh 0px 1px #fff,4vw 37vh 1px 1px #fff,-43vw 28vh 0px 0px #fff,3vw -25vh 0px 1px #fff,-39vw 14vh 0px 1px #fff,-40vw 31vh 0px 1px #fff,35vw -36vh 1px 1px #fff,16vw 49vh 0px 0px #fff,6vw 39vh 0px 0px #fff,3vw -35vh 0px 1px #fff,-44vw -2vh 1px 0px #fff,-6vw 21vh 1px 0px #fff,48vw 9vh 1px 1px #fff,-43vw 30vh 1px 1px #fff,29vw -12vh 1px 1px #fff,-48vw 13vh 1px 0px #fff,-42vw 32vh 1px 1px #fff,34vw 15vh 1px 1px #fff,29vw -37vh 1px 1px #fff,28vw 2vh 0px 0px #fff;
+    animation: zoom 16s alternate infinite; 
+}
+
+@keyframes zoom {
+    0%{
+        transform: scale(1);
+    }
+    100%{
+        transform: scale(1.5);
+    }
+}
+.input-gradient {
+  color: #1abc9c;
+  border-radius: 4px;
+  border: 5px solid #fff;
+  background-color: transparent;
+  border-color: #fff; /* fallback */
+  border-image: linear-gradient(-45deg, #3498db, #e67e22) 1;
+}
+.modal-content .input-gradient{
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal2 {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(77, 77, 77, .7);
+  transition: all .4s;
+}
+
+.modal2:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal__content {
+  border-radius: 4px;
+  position: relative;
+  width: 500px;
+  max-width: 90%;
+  background: #953c3c;
+  padding: 1em 2em;
+}
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  text-decoration: none;
+}
+.wrapper a{text-decoration: none;}
+.collect{display: none;position:absolute;left:48%}
+</style>
+</head>
+<body>
+<div class="main"></div>
+<div class="parent input-gradient">
+<h1>0.000 something</h1>
+<button class="round glow-on-hover" onclick="clicking(100)" type="button"></button>
+</div>
+<div class="shop input-gradient">
+<h1 id = "price">Tree - 10 something</h1>
+<h4>0.1 clicks/sec</h4>
+<button class="buy" onclick="buying(1)">Buy</button>
+<h1 id = "price">Student - 100 something</h1>
+<h4>0.5 clicks/sec</h4>
+<button class="buy" onclick="buying(2)">Buy</button>
+<h1 id = "price">Frog - 500 something</h1>
+<h4>1 click/sec</h4>
+<button class="buy" onclick="buying(3)">Buy</button>
+<h1 id = "price">+30 seconds - 100 something</h1>
+<button class="buy" onclick="buying(4)">Buy</button>
+</div>
+<div class="inventory input-gradient">
+<h1 id="invent"></h1>
+</div>
+<div id="timer">30.00</div>
+
+<div id="myModal" class="modal">
+  <div class="modal-content input-gradient" onclick="shutdown()">
+  <div style="z-index: 1">
+  <p id = "first-line">Some text in the Modal Body</p>
+          <p id = "second-line">Some other text...</p>
+          <button class="restart" onclick="resetCountdown()">Restart</button></div>
+  <div id="retrobg">
+    <div id="retrobg-sky">
+      <div id="retrobg-stars">
+        <div class="retrobg-star" style="left:  5%; top: 55%; transform: scale( 2 );"></div>
+        <div class="retrobg-star" style="left:  7%; top:  5%; transform: scale( 2 );"></div>
+        <div class="retrobg-star" style="left: 10%; top: 45%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 12%; top: 35%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 15%; top: 39%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 20%; top: 10%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 35%; top: 50%; transform: scale( 2 );"></div>
+        <div class="retrobg-star" style="left: 40%; top: 16%; transform: scale( 2 );"></div>
+        <div class="retrobg-star" style="left: 43%; top: 28%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 45%; top: 30%; transform: scale( 3 );"></div>
+        <div class="retrobg-star" style="left: 55%; top: 18%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 60%; top: 23%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 62%; top: 44%; transform: scale( 2 );"></div>
+        <div class="retrobg-star" style="left: 67%; top: 27%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 75%; top: 10%; transform: scale( 2 );"></div>
+        <div class="retrobg-star" style="left: 80%; top: 25%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 83%; top: 57%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 90%; top: 29%; transform: scale( 2 );"></div>
+        <div class="retrobg-star" style="left: 95%; top:  5%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 96%; top: 72%; transform: scale( 1 );"></div>
+        <div class="retrobg-star" style="left: 98%; top: 70%; transform: scale( 3 );"></div>
+      </div>
+      <div id="retrobg-sunWrap">
+        <div id="retrobg-sun"></div>
+      </div>
+      <div id="retrobg-mountains">
+        <div id="retrobg-mountains-left" class="retrobg-mountain"></div>
+        <div id="retrobg-mountains-right" class="retrobg-mountain"></div>
+      </div>
+      <div id="retrobg-cityWrap">
+        <div id="retrobg-city">
+          <div style="left:  4.0%; height: 20%; width: 3.0%;" class="retrobg-building"></div>
+          <div style="left:  6.0%; height: 50%; width: 1.5%;" class="retrobg-building"></div>
+          <div style="left:  8.0%; height: 25%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 12.0%; height: 30%; width: 3.0%;" class="retrobg-building"></div>
+          <div style="left: 13.0%; height: 55%; width: 3.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 17.0%; height: 20%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 18.5%; height: 70%; width: 1.5%;" class="retrobg-building"></div>
+          <div style="left: 20.0%; height: 30%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 21.5%; height: 80%; width: 2.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 25.0%; height: 60%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 28.0%; height: 40%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 30.0%; height: 70%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 35.0%; height: 65%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 38.0%; height: 40%; width: 3.0%;" class="retrobg-building"></div>
+          <div style="left: 42.0%; height: 60%; width: 2.0%;" class="retrobg-building"></div>
+          <div style="left: 43.0%; height: 85%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 45.0%; height: 40%; width: 3.0%;" class="retrobg-building"></div>
+          <div style="left: 48.0%; height: 25%; width: 3.0%;" class="retrobg-building"></div>
+          <div style="left: 50.0%; height: 80%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 52.0%; height: 32%; width: 5.0%;" class="retrobg-building"></div>
+          <div style="left: 55.0%; height: 55%; width: 3.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 58.0%; height: 45%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 61.0%; height: 90%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 66.0%; height: 99%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 69.0%; height: 30%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 73.5%; height: 90%; width: 2.0%;" class="retrobg-building"></div>
+          <div style="left: 72.0%; height: 70%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 75.0%; height: 60%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 80.0%; height: 40%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 83.0%; height: 70%; width: 4.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 87.0%; height: 60%; width: 3.0%;" class="retrobg-building retrobg-antenna"></div>
+          <div style="left: 93.0%; height: 50%; width: 3.0%;" class="retrobg-building"></div>
+          <div style="left: 91.0%; height: 30%; width: 4.0%;" class="retrobg-building"></div>
+          <div style="left: 94.0%; height: 20%; width: 3.0%;" class="retrobg-building"></div>
+          <div style="left: 98.0%; height: 35%; width: 2.0%;" class="retrobg-building"></div>
+        </div>
+      </div>
+    </div>
+    <div id="retrobg-ground">
+      <div id="retrobg-linesWrap">
+        <div id="retrobg-lines">
+          <div id="retrobg-vlines">
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+            <div class="retrobg-vline"></div>
+          </div>
+          <div id="retrobg-hlines">
+            <div class="retrobg-hline"></div>
+            <div class="retrobg-hline"></div>
+            <div class="retrobg-hline"></div>
+            <div class="retrobg-hline"></div>
+            <div class="retrobg-hline"></div>
+            <div class="retrobg-hline"></div>
+            <div class="retrobg-hline"></div>
+            <div class="retrobg-hline"></div>
+          </div>
+        </div>
+      </div>
+      <div id="retrobg-groundShadow"></div>
+    </div>
+    </div>
+    </div>
+    </div>
+<div class="wrapper">
+  <a href="#modal" onclick="myFunction(true)">Missions</a><a href="#modal" onclick="myFunction(true)" style="display: none;color: rgb(245, 18, 18);font-size: 208.333%;position: relative;margin-top: -1%;" id="alert">&#128900;</a>
+</div>
+
+<div id="modal" class="modal2">
+  <div class="modal__content">
+    <h4 style="position: absolute;left: 1%;top: -6%;" id = "counter"></h4>
+      <h1>Missions</h1>
+      <p id = "Missions">
+        To display the missions you need to start the game, good luck
+      </p>
+      <button class = "collect" style="top:25%" onclick="collectMissions(1)">Collect</button>
+      <button class = "collect" style="top:42%" onclick="collectMissions(2)">Collect</button>
+      <button class = "collect" style="top:59%" onclick="collectMissions(3)">Collect</button>
+      <button class = "collect" style="top:75%;left: 57%;" onclick="collectMissions(4)">Collect</button>
+      <a href="#" class="modal__close" onclick="myFunction(false)">&times;</a>
+  </div>
+</div>
+<h4 class = "disappear" style="position: absolute;top:-3%;left: 1%;">F4 for no time mode, made by <y>lllmaxlll</y><br>Space,arrow up working to<br>Limit cps: 10</h4>
+<script src="script.js"></script>
+</body>
+</html>
