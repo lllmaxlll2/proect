@@ -9,6 +9,8 @@ first_line.style.color = "#a3c"
 second_line.style.color = "#a3c"
 collecters = document.querySelectorAll(".collect")
 alerter = document.querySelector("#alert")
+timeis = true
+deleter = document.querySelectorAll("#delete")
 var tree = 0
 var student = 0
 var frog = 0
@@ -108,7 +110,10 @@ if(timer.textContent == "Time's up!"){
 restart[0].style.display = "block";
 count = 0
 }
+if (timeis){
 text_mis.innerText = missions[0] + "\nReward: " +rewards[0] +" something\n\n"+missions[1] + "\nReward: " +rewards[1]+nameitem[Math.round(iditem-1)]+"\n\n"+missions[2] + "\nReward: " +rewards[2]+" something\n\n"+missions[3] + "\nReward: x" +rewards[3] + " multiple click"
+}
+else{text_mis.innerText = missions[0] + "\nReward: " +rewards[0] +" something\n\n"+missions[1] + "\nReward: " +rewards[1]+nameitem[Math.round(iditem-1)]+"\n\n"+missions[3] + "\nReward: x" +rewards[3] + " multiple click"}
 counter.innerText = "Complete Missions: " + missions_count
 checkMissions()}
 }
@@ -269,5 +274,5 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);}
 document.addEventListener('keyup', ({keyCode})=>{
 if(keyCode == 27){if (ispause == false){myFunction(true);alert("Pause")}else{myFunction(false);alert("Unpause")}}
-if(keyCode == 115){seconds=99999;timer.style.display="none"}
+if(keyCode == 115){seconds=99999;timer.style.display="none";collecters[2].style.display = "none";timeis = false; deleter[0].style.display = "none";deleter[1].style.display = "none"}
 if(keyCode == 38 || keyCode == 32){clicking(100)}})
